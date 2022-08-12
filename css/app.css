@@ -1,0 +1,44 @@
+.form-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10rem;
+}
+
+.content-login {
+    width: 20rem;
+    padding: 1rem;
+    background-color: #ffff;
+    border: solid #a2a2a2 2px;
+}
+
+.derecha {
+    display: flex;
+    justify-content: end;
+}
+
+label.error {
+    color: red;
+}
+
+.enviar:hover {
+    background-color: #a2a2a2;
+    width: 6rem;
+}
+
+.main-form {
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .main-form {
+        width: 50rem;
+        margin-top: 5rem;
+    }
+}
+
+.izquierda {
+    display: flex;
+    justify-content: inherit;
+    margin: 1rem;
+}
