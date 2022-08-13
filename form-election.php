@@ -32,6 +32,7 @@
                     </div>
                     <div class="izquierda">
                         <button type="submit" class="btn btn-primary enviar">Submit</button>
+                        <a href="form-upload.php" class="btn btn-success">Upload</a>
                     </div>
                 </form>
             </div>

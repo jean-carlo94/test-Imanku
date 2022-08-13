@@ -39,6 +39,6 @@ label.error {
 
 .izquierda {
     display: flex;
-    justify-content: inherit;
+    justify-content: space-between;
     margin: 1rem;
 }

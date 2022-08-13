@@ -55,6 +55,36 @@ $(function() {
     });
 });
 
+$("#excel_accion").click(function() {
+    var excel = $("#excel");
+    if(excel.val() != ""){
+        var formData = new FormData();
+        var files = $('#excel')[0].files[0];
+        formData.append('file',files);
+        var data = upload(formData);
+        console.log(data);
+    }else{
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: "Deve Seleccionar un archivo Excel",
+        })
+    }
+});
+$("#json_accion").click(function() {
+    var josn = $("#json");
+    if(josn.val() != ""){
+        console.log(josn.val())
+    }else{
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: "Deve Seleccionar un archivo josn",
+        })
+    }
+});
+
+
 function sends(url, type, form_data) {
     var result = "";
     $.ajax({
@@ -72,6 +102,22 @@ function sends(url, type, form_data) {
         error: function(xhr, status) {
             result = 'Disculpe, existió un problema';
             console.log(xhr, status);
+        }
+    });
+    return result;
+}
+
+function upload(formData) {
+    var result = "";
+    $.ajax({
+        async: false,
+        url: 'upload.php',
+        type: 'post',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            result = response;
         }
     });
     return result;
