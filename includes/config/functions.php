@@ -3,7 +3,7 @@ require 'database.php';
 require '/var/www/html/test-Imanku/vendor/autoload.php';
 use \PhpOffice\PhpSpreadsheet\IOFactory;
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_REQUEST['f'])){
     $rta = '';
     $ev="\$rta={$_REQUEST['f']}();";
     if (function_exists("{$_REQUEST['f']}")){
@@ -49,7 +49,19 @@ function login(): string{
     }
     return $state;
 }
-function uploadInfoExcel($file){
+function addvotes(): string{
+    $db = conectarDB();
+    $rta ="";
+    $query = "INSERT INTO election (year,voteCount,poloticalParty,countty_id) VALUES ('{$_POST['year']}','{$_POST['votes']}','{$_POST['party']}',{$_POST['contry']})";
+    $result = mysqli_query($db,$query);
+    if($result){
+        $rta = "Votos ingresados correctamente";
+    }else{
+        $rta = "Error ingresando Vostos";
+    }   
+    return $rta;
+}
+function uploadInfoExcel($file): string{
     $rta = "";
     $documento = IOFactory::load($file);
     $hoja = $documento->getSheet(0);
@@ -79,7 +91,7 @@ function uploadInfoExcel($file){
         $population = ($population === ''?0:$population);
         $area = explode('.',$hoja->getCellByColumnAndRow(5, $i));
         $area =$area[0].".".substr($area[1],0,2); 
-                
+
         $query = "SELECT * FROM countty WHERE codeCounty = '$codecounty' AND county = '$county' AND population = $population AND area = $area AND estates_id = $estate";
         $resultado = mysqli_query($db, $query);
 
@@ -89,8 +101,34 @@ function uploadInfoExcel($file){
             if($result){
                 $rta = "Carga Correcta";
             }
-        } 
+        }else{
+            $rta = "La informacion Ya fue cargada";
+        }
+
     }
     return $rta;
 }
 
+function uploadInfoJson($file): string{
+    $db = conectarDB();
+    $info = file_get_contents($file);
+    $info = json_decode($info);
+
+    for ($i=0; $i < count($info) ; $i++) { 
+        $query = "SELECT id FROM countty WHERE codeCounty = '{$info[$i]->codecounty}'";
+        $county = mysqli_fetch_assoc(mysqli_query($db, $query))['id'];
+
+        foreach ($info[$i] as $key => $value){
+            if($key != 'year' && $key != 'codecounty'){
+                $query = "INSERT INTO election (year,voteCount,poloticalParty,countty_id) VALUES ('{$info[$i]->year}','{$value}','{$key}',$county)";
+                $result = mysqli_query($db, $query);
+                if($result){
+                    $rta = "Votos ingresados correctamente";
+                }else{
+                    exit;
+                };
+            }
+        }
+    }
+    return $rta;
+}

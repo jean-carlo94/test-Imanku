@@ -22,6 +22,9 @@
                             <input type="file" class="form-control" id="json" name="json" aria-describedby="json_accion" aria-label="Upload" accept=".json">
                         </div>                      
                     </div>
+                    <div class="izquierda">
+                        <a href="form-election.php" class="btn btn-success">Back</a>
+                    </div>
                 </form>
             </div>
         </main>

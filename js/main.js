@@ -41,6 +41,12 @@ $(function() {
             votes: {
                 required: true,
                 number: true,
+            },
+            party: {
+                required: true,
+            },
+            contry: {
+                required: true,
             }
         },
         messages: {
@@ -48,9 +54,16 @@ $(function() {
             votes: {
                 required: "Por favor proporcione un numero de votos",
             },
+            party: {
+                required: "Por favor proporcione un Partido",
+            },
+            contry: {
+                required: "Por favor proporcione un county",
+            },
         },
         submitHandler: function(form) {
-            form.submit();
+            var data = sends("includes/config/functions.php?f=addvotes", 'POST', ($("#election").serialize()));
+            Swal.fire(data);
         }
     });
 });
@@ -62,7 +75,7 @@ $("#excel_accion").click(function() {
         var files = $('#excel')[0].files[0];
         formData.append('file',files);
         var data = upload(formData);
-        console.log(data);
+        Swal.fire(data);
     }else{
         Swal.fire({
             icon: 'error',
@@ -74,7 +87,11 @@ $("#excel_accion").click(function() {
 $("#json_accion").click(function() {
     var josn = $("#json");
     if(josn.val() != ""){
-        console.log(josn.val())
+        var formData = new FormData();
+        var files = $('#json')[0].files[0];
+        formData.append('file',files);
+        var data = upload(formData);
+        Swal.fire(data);
     }else{
         Swal.fire({
             icon: 'error',
@@ -118,6 +135,7 @@ function upload(formData) {
         processData: false,
         success: function(response) {
             result = response;
+            console.log(result);
         }
     });
     return result;
